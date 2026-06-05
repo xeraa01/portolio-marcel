@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcello Antonio | Portfolio - Network Admin & Art Fusion</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        obsidian: {
+                            bg: '#0a0a0c',
+                            card: '#121216',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            primary: '#ffffff',
+                            muted: '#8e8e93',
+                            glow: 'rgba(255, 255, 255, 0.03)'
+                        }
+                    },
+                    boxShadow: {
+                        'premium': '0 20px 40px rgba(0, 0, 0, 0.7)',
+                        'subtle-white': '0 0 20px rgba(255, 255, 255, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0a0a0c;
+            overflow-x: hidden;
+        }
+        /* Custom Premium Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        /* Glassmorphism styling matching 'Landing page.jpg' concept */
+        .glass-panel {
+            background: rgba(18, 18, 22, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-panel:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(18, 18, 22, 0.8);
+        }
+        .text-outline-glow {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="text-white font-sans antialiased relative selection:bg-white selection:text-black">
+
+    <!-- 3D Canvas layer behind all content -->
+    <div class="fixed inset-0 w-full h-full z-0 pointer-events-none" id="canvas-3d-bg"></div>
+
+    <!-- Navigation Bar aligned with visual reference -->
+    <nav class="sticky top-0 z-50 backdrop-blur-md bg-obsidian-bg/65 border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Identity -->
+                <a href="#" class="flex items-center space-x-3 group">
+                    <div class="w-10 h-10 rounded-full border border-white/25 flex items-center justify-center font-mono font-bold text-sm tracking-widest transition-all duration-300 group-hover:border-white">
+                        M
+                    </div>
+                    <div class="leading-none">
+                        <span class="text-xs font-bold tracking-widest font-mono uppercase block">&lt;MARCELLO.A/&gt;</span>
+                        <span class="text-[9px] text-obsidian-muted font-mono uppercase tracking-widest">IT & ART ADVENTURER</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8 text-xs font-mono tracking-widest">
+                    <a href="#about" class="text-obsidian-muted hover:text-white transition duration-300">ABOUT</a>
+                    <a href="#skills" class="text-obsidian-muted hover:text-white transition duration-300">SKILLS</a>
+                    <a href="#labs" class="text-obsidian-muted hover:text-white transition duration-300">LABS</a>
+                    <a href="#art" class="text-obsidian-muted hover:text-white transition duration-300">DIGITAL ART</a>
+                    <a href="#history" class="text-obsidian-muted hover:text-white transition duration-300">TIMELINE</a>
+                    <a href="#contact" class="px-5 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all duration-300">JOIN COLLAB</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="p-2 border border-white/10 rounded-full bg-obsidian-card/50">
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-dropdown" class="hidden md:hidden border-b border-white/5 bg-obsidian-bg/95 px-6 py-6 space-y-4 shadow-2xl font-mono text-xs tracking-widest">
+            <a href="#about" class="mobile-link block text-obsidian-muted hover:text-white">ABOUT</a>
+            <a href="#skills" class="mobile-link block text-obsidian-muted hover:text-white">SKILLS</a>
+            <a href="#labs" class="mobile-link block text-obsidian-muted hover:text-white">LABS</a>
+            <a href="#art" class="mobile-link block text-obsidian-muted hover:text-white">DIGITAL ART</a>
+            <a href="#history" class="mobile-link block text-obsidian-muted hover:text-white">TIMELINE</a>
+            <a href="#contact" class="mobile-link block text-center px-4 py-2.5 border border-white/20 rounded-full hover:bg-white hover:text-black">JOIN COLLAB</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section: Perfectly matching 'Landing page.jpg' layout overlay -->
+    <header class="relative min-h-[calc(100vh-80px)] flex items-center justify-center z-10 px-6 sm:px-8">
+        <div class="text-center max-w-4xl mx-auto space-y-6">
+            
+            <div class="space-y-4">
+                <h1 class="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tighter text-outline-glow leading-none">
+                    MARCELLO
+                </h1>
+                <div class="w-24 h-[1px] bg-white/30 mx-auto"></div>
+                <p class="text-xs sm:text-sm font-mono tracking-widest text-obsidian-muted uppercase">
+                    DESIGNING THE INFRASTRUCTURE OF THE FUTURE
+                </p>
+            </div>
+
+            <div class="pt-6">
+                <a href="#labs" class="inline-block px-8 py-3.5 border border-white rounded-full text-xs font-mono tracking-widest hover:bg-white hover:text-black transition-all duration-300 shadow-subtle-white">
+                    UJI COBA INTERAKTIF
+                </a>
+            </div>
+        </div>
+
+        <!-- Subtle down indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-2 opacity-50">
+            <span class="text-[9px] font-mono tracking-widest">SCROLL DOWN</span>
+            <div class="w-[1px] h-8 bg-gradient-to-b from-white to-transparent animate-bounce"></div>
+        </div>
+    </header>
+
+    <!-- About Section (Verbatim details from CVMARCELLOANTONIOATS.docx) -->
+    <section id="about" class="relative py-24 sm:py-32 z-10 px-6 sm:px-8 bg-gradient-to-b from-transparent to-obsidian-bg">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
+                
+                <!-- Profile bio verbatim from CV -->
+                <div class="lg:col-span-7 glass-panel p-8 sm:p-12 rounded-3xl flex flex-col justify-between">
+                    <div class="space-y-6">
+                        <span class="text-[10px] font-mono tracking-widest text-obsidian-muted uppercase">&lt;RINGKASAN PROFIL&gt;</span>
+                        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">MARCELLO ANTONIO</h2>
+                        <p class="text-sm sm:text-base text-obsidian-muted leading-relaxed font-sans">
+                            "Mahasiswa semester 3 Program Studi Teknik Komputer di Universitas Duta Bangsa Surakarta. Aktif mengikuti organisasi Himpunan Mahasiswa dan menjadi bagian dari Divisi Litbang (Penelitian dan Pengembangan) selama kurang lebih satu tahun. Memiliki minat untuk belajar dan berkembang di bidang teknologi serta jaringan komputer. Mampu bekerja sama dalam tim, mudah beradaptasi, dan memiliki semangat belajar yang tinggi untuk terus mengembangkan keterampilan dan pengetahuan."
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-white/5 pt-8 mt-8">
+                        <div>
+                            <span class="block text-[9px] font-mono text-obsidian-muted tracking-wider uppercase">AKADEMIK</span>
+                            <span class="text-xs font-bold font-mono">UDB Surakarta</span>
+                        </div>
+                        <div>
+                            <span class="block text-[9px] font-mono text-obsidian-muted tracking-wider uppercase">ORGANISASI</span>
+                            <span class="text-xs font-bold font-mono">Litbang HMTK</span>
+                        </div>
+                        <div>
+                            <span class="block text-[9px] font-mono text-obsidian-muted tracking-wider uppercase">DOMISILI</span>
+                            <span class="text-xs font-bold font-mono">Banjarsari, Solo</span>
+                        </div>
+                        <div>
+                            <span class="block text-[9px] font-mono text-obsidian-muted tracking-wider uppercase">STATUS</span>
+                            <span class="text-xs font-bold font-mono text-white">Ready for Intern</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Verified Educational timeline from CV -->
+                <div class="lg:col-span-5 glass-panel p-8 sm:p-12 rounded-3xl flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-mono tracking-widest text-obsidian-muted uppercase">&lt;PENDIDIKAN RESMI&gt;</span>
+                        <h3 class="text-xl font-bold mt-2 mb-8">Riwayat Pendidikan</h3>
+                    </div>
+                    
+                    <div class="space-y-8 flex-grow flex flex-col justify-center">
+                        <div class="relative pl-6 border-l border-white/10">
+                            <div class="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-white shadow-subtle-white"></div>
+                            <span class="text-[9px] font-mono text-obsidian-muted">2025 - SEKARANG</span>
+                            <h4 class="text-sm font-bold tracking-tight mt-0.5">Universitas Duta Bangsa Surakarta</h4>
+                            <p class="text-xs text-obsidian-muted mt-1">D3 Teknik Komputer | Mahasiswa Aktif Semester 3</p>
+                        </div>
+                        
+                        <div class="relative pl-6 border-l border-white/10">
+                            <div class="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-white/40"></div>
+                            <span class="text-[9px] font-mono text-obsidian-muted">2021 - 2024</span>
+                            <h4 class="text-sm font-bold tracking-tight mt-0.5">SMK Negeri 9 Surakarta</h4>
+                            <p class="text-xs text-obsidian-muted mt-1">Teknik Jaringan Komputer dan Telekomunikasi (TJKT)</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Matrix Section (Formatted from CVMARCELLOANTONIOATS.docx) -->
+    <section id="skills" class="relative py-24 sm:py-32 z-10 px-6 sm:px-8 border-y border-white/5 bg-obsidian-bg/50">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
+                <div>
+                    <span class="text-[10px] font-mono tracking-widest text-obsidian-muted uppercase">&lt;KOMPETENSI TERUJI&gt;</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mt-2">Matriks Keahlian & Alat Kerja</h2>
+                </div>
+                <p class="text-xs sm:text-sm text-obsidian-muted font-mono max-w-sm">
+                    Kombinasi keahlian teknis administrasi jaringan dengan desain digital teruji.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Group 1: Networking -->
+                <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between h-56">
+                    <div class="space-y-4">
+                        <div class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center">
+                            <i class="fa-solid fa-diagram-project text-xs"></i>
+                        </div>
+                        <h3 class="font-bold text-sm">Jaringan & IT Support</h3>
+                        <ul class="space-y-1 font-mono text-[11px] text-obsidian-muted">
+                            <li>• MikroTik Dasar</li>
+                            <li>• Winbox Engine</li>
+                            <li>• Troubleshoot LAN/WAN</li>
+                        </ul>
+                    </div>
+                    <span class="text-[9px] font-mono text-obsidian-muted tracking-widest uppercase">CORE ADMIN</span>
+                </div>
+
+                <!-- Group 2: Programming -->
+                <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between h-56">
+                    <div class="space-y-4">
+                        <div class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center">
+                            <i class="fa-solid fa-code text-xs"></i>
+                        </div>
+                        <h3 class="font-bold text-sm">Pemrograman & Web</h3>
+                        <ul class="space-y-1 font-mono text-[11px] text-obsidian-muted">
+                            <li>• HTML5 Dasar</li>
+                            <li>• CSS3 Dasar</li>
+                            <li>• C++ Dasar (Arduino)</li>
+                        </ul>
+                    </div>
+                    <span class="text-[9px] font-mono text-obsidian-muted tracking-widest uppercase">DEVELOPMENT</span>
+                </div>
+
+                <!-- Group 3: Tools -->
+                <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between h-56">
+                    <div class="space-y-4">
+                        <div class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center">
+                            <i class="fa-solid fa-screwdriver-wrench text-xs"></i>
+                        </div>
+                        <h3 class="font-bold text-sm">Alat Kerja & Utilitas</h3>
+                        <ul class="space-y-1 font-mono text-[11px] text-obsidian-muted">
+                            <li>• Microsoft Office</li>
+                            <li>• Canva Pro design</li>
+                            <li>• VirtualBox Oracle VM</li>
+                            <li>• Python scripting</li>
+                        </ul>
+                    </div>
+                    <span class="text-[9px] font-mono text-obsidian-muted tracking-widest uppercase">INFRASTRUCTURE</span>
+                </div>
+
+                <!-- Group 4: Soft Skills -->
+                <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between h-56">
+                    <div class="space-y-4">
+                        <div class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center">
+                            <i class="fa-solid fa-signature text-xs"></i>
+                        </div>
+                        <h3 class="font-bold text-sm">Soft & Art Skills</h3>
+                        <ul class="space-y-1 font-mono text-[11px] text-obsidian-muted">
+                            <li>• Digital Artist</li>
+                            <li>• Character Design</li>
+                            <li>• Komunikasi Tim Baik</li>
+                            <li>• Manajemen Waktu</li>
+                        </ul>
+                    </div>
+                    <span class="text-[9px] font-mono text-obsidian-muted tracking-widest uppercase">CREATIVE MINDS</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sandbox Laboratory: Real Dummy Projects styled beautifully -->
+    <section id="labs" class="relative py-24 sm:py-32 z-10 px-6 sm:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center space-y-4 mb-16">
+                <span class="text-[10px] font-mono tracking-widest text-obsidian-muted uppercase">&lt;INTERACTIVE SANDBOX&gt;</span>
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Dokumentasi & Simulasi Praktik Akademik</h2>
+                <div class="w-12 h-[1px] bg-white/30 mx-auto"></div>
+                <p class="text-xs sm:text-sm text-obsidian-muted font-mono max-w-xl mx-auto">
+                    Kumpulan proyek otentik yang disimulasikan secara real-time. Silakan telusuri tab untuk mengamati output dan struktur kode siap produksi.
+                </p>
+            </div>
+
+            <!-- Tab Switchers -->
+            <div class="flex flex-col sm:flex-row justify-center gap-2 mb-12 max-w-3xl mx-auto">
+                <button onclick="switchLab('mt')" id="tab-mt" class="lab-tab active flex-1 px-6 py-3 border border-white rounded-full text-xs font-mono tracking-widest bg-white text-black transition-all duration-300">
+                    1. MIKROTIK WAN GATEWAY
+                </button>
+                <button onclick="switchLab('ard')" id="tab-ard" class="lab-tab flex-1 px-6 py-3 border border-white/10 hover:border-white rounded-full text-xs font-mono tracking-widest bg-obsidian-card text-obsidian-muted hover:text-white transition-all duration-300">
+                    2. ARDUINO PULSE TELEMETRY
+                </button>
+                <button onclick="switchLab('tun')" id="tab-tun" class="lab-tab flex-1 px-6 py-3 border border-white/10 hover:border-white rounded-full text-xs font-mono tracking-widest bg-obsidian-card text-obsidian-muted hover:text-white transition-all duration-300">
+                    3. SECURE REVERSE TUNNEL
+                </button>
+            </div>
+
+            <!-- TAB 1: MIKROTIK WAN -->
+            <div id="pane-mt" class="lab-pane block duration-500">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                    <div class="lg:col-span-5 flex flex-col justify-between glass-panel p-8 rounded-3xl">
+                        <div class="space-y-4">
+                            <span class="text-[9px] font-mono text-obsidian-muted uppercase">DOKUMENTASI KINERJA A1</span>
+                            <h3 class="text-xl font-bold tracking-tight text-white">Konfigurasi Security & Access Gateway</h3>
+                            <p class="text-xs text-obsidian-muted leading-relaxed">
+                                Membangun gerbang nirkabel aman berbasis RouterOS. Mengatur mode **Station**, memindai SSID eksternal, menetapkan enkripsi **WPA2-PSK**, serta mengaktifkan **DHCP Client**, **DNS Server**, dan **NAT Masquerade** agar internal client terhubung ke internet global.
+                            </p>
+                            <div class="border-t border-white/5 pt-4 space-y-2 font-mono text-[10px] text-obsidian-muted">
+                                <div class="flex justify-between"><span>Perangkat Target:</span><span>RouterBOARD RB951-2nd</span></div>
+                                <div class="flex justify-between"><span>Keamanan Utama:</span><span>WPA2-PSK Enkripsi</span></div>
+                                <div class="flex justify-between"><span>Layanan Jaringan:</span><span>NAT Masquerade & DNS Relay</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Mini Interactive Parameter -->
+                        <div class="mt-8 pt-6 border-t border-white/5 space-y-4">
+                            <div class="grid grid-cols-2 gap-4 text-[10px] font-mono">
+                                <div>
+                                    <label class="block text-obsidian-muted mb-1.5 uppercase">Set Alokasi IP Client:</label>
+                                    <input id="mt-ip-val" type="text" value="192.168.88.0/24" class="w-full bg-obsidian-bg border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-white" oninput="compileMikrotikCode()">
+                                </div>
+                                <div>
+                                    <label class="block text-obsidian-muted mb-1.5 uppercase">Limit Bandwidth:</label>
+                                    <select id="mt-qos-val" class="w-full bg-obsidian-bg border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-white" onchange="compileMikrotikCode()">
+                                        <option value="2M/2M" selected>2 Mbps (Standar Staff)</option>
+                                        <option value="5M/5M">5 Mbps (Premium DevOps)</option>
+                                        <option value="10M/10M">10 Mbps (Sistem Utama)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button onclick="copyCode('code-mt', 'copy-mt-info')" class="w-full py-3 bg-white text-black font-mono text-xs font-bold rounded-full hover:opacity-90 duration-200">
+                                <i class="fa-solid fa-copy mr-1.5"></i> SALIN WINBOX TERMINAL SCRIPT
+                            </button>
+                            <p id="copy-mt-info" class="hidden text-center text-[10px] font-mono text-emerald-400 font-bold animate-pulse">Skrip disalin! Siap diunggah ke Winbox CLI.</p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 flex flex-col justify-between glass-panel p-8 rounded-3xl">
+                        <!-- Topologi visualizer block -->
+                        <div class="p-4 bg-obsidian-bg rounded-2xl border border-white/5 mb-6">
+                            <span class="text-[9px] font-mono text-obsidian-muted block mb-4 uppercase">Simulasi Aliran Distribusi Paket Data</span>
+                            <div class="h-28 flex items-center justify-around relative">
+                                <div class="text-center">
+                                    <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-obsidian-card shadow-subtle-white">
+                                        <i class="fa-solid fa-globe text-xs"></i>
+                                    </div>
+                                    <span class="text-[9px] font-mono text-obsidian-muted mt-2 block">WAN ISP</span>
+                                </div>
+                                <div class="h-[1px] bg-white/20 flex-grow max-w-[60px] relative">
+                                    <span class="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white rounded-full animate-ping"></span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="w-12 h-12 rounded-full border border-white flex items-center justify-center bg-white text-black animate-pulse shadow-premium">
+                                        <i class="fa-solid fa-server text-sm"></i>
+                                    </div>
+                                    <span class="text-[9px] font-mono font-bold mt-2 block">RB951 GW</span>
+                                </div>
+                                <div class="h-[1px] bg-white/20 flex-grow max-w-[60px] relative">
+                                    <span class="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white/50 rounded-full animate-ping" style="animation-delay: 0.5s"></span>
+                                </div>
+                                <div class="text-center">
+                                    <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-obsidian-card">
+                                        <i class="fa-solid fa-laptop text-xs"></i>
+                                    </div>
+                                    <span class="text-[9px] font-mono text-obsidian-muted mt-2 block">DHCP Client</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Real-time code display -->
+                        <div class="flex-grow flex flex-col justify-between">
+                            <span class="text-[10px] font-mono text-obsidian-muted block mb-3 uppercase"><i class="fa-solid fa-terminal mr-2"></i>Terminal Winbox CLI Script Output</span>
+                            <pre class="bg-obsidian-bg p-4 rounded-xl border border-white/5 text-[11px] font-mono text-white/80 overflow-x-auto h-40"><code id="code-mt">/ip hotspot user profile add name="Staff_L1" rate-limit="2M/2M"
+/ip dhcp-client add interface=ether1 disabled=no
+/ip dns set servers=8.8.8.8,1.1.1.1 allow-remote-requests=yes
+/ip firewall nat add chain=srcnat src-address=192.168.88.0/24 out-interface=ether1 action=masquerade</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: ARDUINO UNO -->
+            <div id="pane-ard" class="lab-pane hidden duration-500">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                    <div class="lg:col-span-5 flex flex-col justify-between glass-panel p-8 rounded-3xl">
+                        <div class="space-y-4">
+                            <span class="text-[9px] font-mono text-obsidian-muted uppercase">DOKUMENTASI KINERJA A2</span>
+                            <h3 class="text-xl font-bold tracking-tight text-white">Alat Ukur Detak Jantung / Heart Rate</h3>
+                            <p class="text-xs text-obsidian-muted leading-relaxed">
+                                Merakit sensor analog detak jantung berbasis optik inframerah dengan mikrokontroler **Arduino UNO**. Sinyal listrik analog dari denyut darah diproses menggunakan sampling frekuensi 60Hz, menyaring derau, dan mengirimkan paket serial telemetri ke konsol visualizer.
+                            </p>
+                            <div class="border-t border-white/5 pt-4 space-y-2 font-mono text-[10px] text-obsidian-muted">
+                                <div class="flex justify-between"><span>Microcontroller:</span><span>Arduino UNO R3 ATmega328P</span></div>
+                                <div class="flex justify-between"><span>Sensor Fisik:</span><span>Analog Optical Heart Pulse Sensor</span></div>
+                                <div class="flex justify-between"><span>Kanal Telemetri:</span><span>Serial USART Stream (9600 bps)</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Arduino customizer panel -->
+                        <div class="mt-8 pt-6 border-t border-white/5 space-y-4">
+                            <div class="grid grid-cols-3 gap-2">
+                                <button onclick="triggerPulseSimulation('low')" class="py-2 border border-white/10 hover:border-white text-[9px] font-mono rounded-lg transition-all">55 BPM (Rendah)</button>
+                                <button onclick="triggerPulseSimulation('normal')" class="py-2 border border-white text-[9px] font-mono rounded-lg bg-white text-black font-bold transition-all">75 BPM (Normal)</button>
+                                <button onclick="triggerPulseSimulation('high')" class="py-2 border border-white/10 hover:border-white text-[9px] font-mono rounded-lg transition-all">115 BPM (Tinggi)</button>
+                            </div>
+                            <button onclick="copyCode('code-ard', 'copy-ard-info')" class="w-full py-3 bg-white text-black font-mono text-xs font-bold rounded-full hover:opacity-90 duration-200">
+                                <i class="fa-solid fa-copy mr-1.5"></i> SALIN ARDUINO SKETCH (.INO)
+                            </button>
+                            <p id="copy-ard-info" class="hidden text-center text-[10px] font-mono text-emerald-400 font-bold animate-pulse">Source code disalin! Siap dijalankan di Arduino IDE.</p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 flex flex-col justify-between glass-panel p-8 rounded-3xl">
+                        <!-- Wave monitor block -->
+                        <div class="p-4 bg-obsidian-bg rounded-2xl border border-white/5 mb-6">
+                            <span class="text-[9px] font-mono text-obsidian-muted block mb-4 uppercase">Serial Oskiloskop Telemetri Detak Jantung</span>
+                            <div class="h-28 bg-black/50 rounded-lg relative overflow-hidden flex items-end p-2 border border-white/5">
+                                <svg class="w-full h-24" id="oscilloscope-svg" viewBox="0 0 400 100" preserveAspectRatio="none">
+                                    <path d="M 0 50 L 50 50 L 55 10 L 60 90 L 65 50 L 120 50 L 125 10 L 130 90 L 135 50 L 200 50 L 205 10 L 210 90 L 215 50 L 280 50 L 285 10 L 290 90 L 295 50 L 400 50" fill="none" stroke="#ffffff" stroke-width="2" />
+                                </svg>
+                                <div class="absolute inset-x-4 bottom-2 flex justify-between font-mono text-[9px] text-obsidian-muted pt-1 border-t border-white/5">
+                                    <span id="oscilloscope-bpm-txt">Aktif: 75 BPM</span>
+                                    <span id="oscilloscope-status-txt" class="text-white font-bold">SIGNAL STABLE</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Real-time code display -->
+                        <div class="flex-grow flex flex-col justify-between">
+                            <span class="text-[10px] font-mono text-obsidian-muted block mb-3 uppercase"><i class="fa-solid fa-code mr-2"></i>Sketsa Arduino IDE (.ino)</span>
+                            <pre class="bg-obsidian-bg p-4 rounded-xl border border-white/5 text-[11px] font-mono text-white/80 overflow-x-auto h-40"><code id="code-ard">#define PULSE_PIN A0
+int signalValue = 0;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(PULSE_PIN, INPUT);
+}
+
+void loop() {
+  signalValue = analogRead(PULSE_PIN);
+  Serial.print("TELEMETRY_RAW:");
+  Serial.println(signalValue);
+  delay(15); // Sampling Rate 60Hz
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: REVERSE TUNNEL -->
+            <div id="pane-tun" class="lab-pane hidden duration-500">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                    <div class="lg:col-span-5 flex flex-col justify-between glass-panel p-8 rounded-3xl">
+                        <div class="space-y-4">
+                            <span class="text-[9px] font-mono text-obsidian-muted uppercase">DOKUMENTASI KINERJA A3</span>
+                            <h3 class="text-xl font-bold tracking-tight text-white">HTTP Server & Cloudflare Tunnel</h3>
+                            <p class="text-xs text-obsidian-muted leading-relaxed">
+                                Mempublikasikan situs web lokal ke ranah publik tanpa menyewa IP Publik Statis. Server web dijalankan secara lokal via **Python HTTP Engine** (Port 8000), lalu dihubungkan secara instan melalui daemon agen **Cloudflared** ke jaringan global Cloudflare terenkripsi SSL/TLS.
+                            </p>
+                            <div class="border-t border-white/5 pt-4 space-y-2 font-mono text-[10px] text-obsidian-muted">
+                                <div class="flex justify-between"><span>Server Lokal:</span><span>Python 3 SimpleHTTPServer</span></div>
+                                <div class="flex justify-between"><span>Secure Tunnel:</span><span>Cloudflare Daemon (Cloudflared)</span></div>
+                                <div class="flex justify-between"><span>Protokol Enkripsi:</span><span>TLS v1.3 Secure Handshake</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Tunnel controls -->
+                        <div class="mt-8 pt-6 border-t border-white/5 space-y-4">
+                            <button onclick="pingGlobalTunnel()" class="w-full py-3 bg-white text-black font-mono text-xs font-bold rounded-full hover:opacity-90 duration-200">
+                                <i class="fa-solid fa-satellite-dish mr-1.5"></i> INTIASI HANDSHAKE TUNNEL
+                            </button>
+                            <button onclick="copyCode('code-tun', 'copy-tun-info')" class="w-full py-2.5 border border-white/10 hover:border-white text-white font-mono text-[10px] rounded-full duration-200">
+                                SALIN CONFIG.YML DAEMON
+                            </button>
+                            <p id="copy-tun-info" class="hidden text-center text-[10px] font-mono text-emerald-400 font-bold animate-pulse">Konfigurasi YAML berhasil disalin!</p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 flex flex-col justify-between glass-panel p-8 rounded-3xl">
+                        <!-- Tunnel Logger console -->
+                        <div class="p-4 bg-obsidian-bg rounded-2xl border border-white/5 mb-6">
+                            <span class="text-[9px] font-mono text-obsidian-muted block mb-4 uppercase">Tunnel Daemon Handshake Logs</span>
+                            <div class="h-28 bg-black/60 rounded-lg p-3 font-mono text-[10px] text-obsidian-muted overflow-y-auto space-y-1" id="tunnel-log-console">
+                                <p class="text-white/40">[SYS]: Menunggu inisiasi pemicu daemon oleh pengguna...</p>
+                            </div>
+                        </div>
+
+                        <!-- Real-time code display -->
+                        <div class="flex-grow flex flex-col justify-between">
+                            <span class="text-[10px] font-mono text-obsidian-muted block mb-3 uppercase"><i class="fa-solid fa-file-lines mr-2"></i>Daemon Settings (config.yml)</span>
+                            <pre class="bg-obsidian-bg p-4 rounded-xl border border-white/5 text-[11px] font-mono text-white/80 overflow-x-auto h-40"><code id="code-tun">tunnel: udb-marcello-net
+credentials-file: /root/.cloudflared/credentials.json
+
+ingress:
+  - hostname: mhs-marcello.udb.ac.id
+    service: http://localhost:8000
+  - service: http_status:404</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Digital Art & Avatar Customizer Section -->
+    <section id="art" class="relative py-24 sm:py-32 z-10 px-6 sm:px-8 border-t border-white/5 bg-obsidian-bg/40">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Customize Controller -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div>
+                        <span class="text-[10px] font-mono tracking-widest text-obsidian-muted uppercase">&lt;SENI & KREATIVITAS&gt;</span>
+                        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mt-2">Digital Art Showcase</h2>
+                    </div>
+                    <p class="text-xs sm:text-sm text-obsidian-muted leading-relaxed">
+                        Sisi kanan otak Marcello diasah melalui seni lukis karakter fiksi ilmiah. Gunakan panel kustomisasi di bawah ini untuk berinteraksi dengan salah satu karya seni vektor buatan Marcello.
+                    </p>
+
+                    <div class="glass-panel p-6 rounded-2xl space-y-4">
+                        <h4 class="text-xs font-mono font-bold tracking-wider uppercase text-white border-b border-white/5 pb-2">Kontrol Estetika Vektor</h4>
+                        
+                        <!-- Glow Selection -->
+                        <div class="space-y-2">
+                            <label class="block text-[10px] font-mono text-obsidian-muted uppercase">Pendar Aura Belakang (Backlight Glow):</label>
+                            <div class="flex space-x-2">
+                                <button onclick="setAvatarStyle('glow-white')" class="w-6 h-6 rounded-full bg-white border border-white/40 hover:scale-110 transition duration-150"></button>
+                                <button onclick="setAvatarStyle('glow-slate')" class="w-6 h-6 rounded-full bg-slate-600 border border-white/20 hover:scale-110 transition duration-150"></button>
+                                <button onclick="setAvatarStyle('glow-dark')" class="w-6 h-6 rounded-full bg-zinc-900 border border-white/20 hover:scale-110 transition duration-150"></button>
+                            </div>
+                        </div>
+
+                        <!-- Visor Selection -->
+                        <div class="space-y-2 pt-2">
+                            <label class="block text-[10px] font-mono text-obsidian-muted uppercase">Warna Lensa Visor Kacamata Cyber:</label>
+                            <div class="flex space-x-2">
+                                <button onclick="setAvatarStyle('visor-white')" class="px-3 py-1.5 text-[9px] font-mono border border-white bg-white text-black font-bold rounded-full transition duration-150">Monochrome White</button>
+                                <button onclick="setAvatarStyle('visor-glass')" class="px-3 py-1.5 text-[9px] font-mono border border-white/10 hover:border-white text-white rounded-full transition duration-150">Dark Metallic</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Vector Canvas Frame -->
+                <div class="lg:col-span-7 flex justify-center">
+                    <div class="glass-panel p-8 rounded-3xl relative overflow-hidden flex flex-col items-center w-full max-w-sm">
+                        <!-- Interactive Vector Canvas -->
+                        <div class="w-64 h-64 relative bg-obsidian-bg border border-white/5 rounded-2xl flex items-center justify-center p-4">
+                            <!-- Glow Layer behind SVG -->
+                            <div id="vector-back-glow" class="absolute w-44 h-44 rounded-full bg-white/10 filter blur-xl animate-pulse"></div>
+
+                            <!-- Native SVG Vector Character Portrait -->
+                            <svg class="relative z-10 w-full h-full" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Body Base -->
+                                <path d="M30 90 C30 70, 70 70, 70 90" fill="#18181c" stroke="#ffffff" stroke-width="1.5" />
+                                <!-- Face -->
+                                <circle cx="50" cy="48" r="22" fill="#2d2d34" stroke="#ffffff" stroke-width="1.5" />
+                                <circle cx="28" cy="48" r="4" fill="#2d2d34" stroke="#ffffff" stroke-width="1.5" />
+                                <circle cx="72" cy="48" r="4" fill="#2d2d34" stroke="#ffffff" stroke-width="1.5" />
+                                <!-- Sleek cyber hair -->
+                                <path d="M28 40 C35 22, 65 22, 72 40 C65 32, 35 32, 28 40" fill="#0f0f12" stroke="#ffffff" stroke-width="2" />
+                                <!-- Dynamic Cyber Visor -->
+                                <polygon id="vector-visor" points="34,44 66,44 62,54 38,54" fill="rgba(255, 255, 255, 0.2)" stroke="#ffffff" stroke-width="1.5" />
+                                <line x1="30" y1="48" x2="34" y2="48" stroke="#ffffff" stroke-width="1.5" />
+                                <line x1="66" y1="48" x2="70" y2="48" stroke="#ffffff" stroke-width="1.5" />
+                                <!-- Neck socket -->
+                                <rect x="47" y="70" width="6" height="8" fill="#18181c" />
+                                <circle cx="50" cy="74" r="1.5" fill="#ffffff" />
+                            </svg>
+                        </div>
+                        <span class="block text-[9px] font-mono text-obsidian-muted mt-4">MARCELLO ORIGINAL CHARACTER GRAPHIC</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience & Career Timeline Section -->
+    <section id="history" class="relative py-24 sm:py-32 z-10 px-6 sm:px-8 border-t border-white/5 bg-obsidian-bg">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
+                <div>
+                    <span class="text-[10px] font-mono tracking-widest text-obsidian-muted uppercase">&lt;REKAM JEJAK AKTIF&gt;</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mt-2">Pengalaman Organisasi & Kerja</h2>
+                </div>
+                <p class="text-xs sm:text-sm text-obsidian-muted font-mono max-w-sm">
+                    Integritas berorganisasi serta pengabdian profesional di lapangan nyata.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+                <!-- Org Card (HMTK UDB Surakarta) -->
+                <div class="glass-panel p-8 sm:p-10 rounded-3xl flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full filter blur-2xl"></div>
+                    
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-start">
+                            <span class="text-[9px] font-mono text-white border border-white/25 px-3 py-1 rounded-full uppercase">ORMAWA KAMPUS</span>
+                            <span class="text-[9px] font-mono text-obsidian-muted"><i class="fa-solid fa-calendar mr-1.5"></i>DES 2025 - SEKARANG</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold tracking-tight">Koordinator Divisi Litbang</h3>
+                            <p class="text-xs text-obsidian-muted font-mono mt-1">Himpunan Mahasiswa Teknik Komputer (HMTK) UDB</p>
+                        </div>
+                        <ul class="space-y-3 text-xs text-obsidian-muted border-t border-white/5 pt-6">
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-circle-check text-white mt-1 mr-3 flex-shrink-0 text-[10px]"></i>
+                                <span>Bertanggung jawab untuk merumuskan inovasi, mengkaji ide-ide baru, mengumpulkan data, serta mengevaluasi dan mengembangkan program agar kinerja ke depannya menjadi lebih baik.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-circle-check text-white mt-1 mr-3 flex-shrink-0 text-[10px]"></i>
+                                <span>Membantu pelaksanaan kegiatan internal-eksternal serta melatih komunikasi, tanggung jawab, dan manajemen waktu.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-asterisk text-white/50 mt-1 mr-3 flex-shrink-0 text-[10px]"></i>
+                                <span class="font-bold text-white">Delegasi Aktif: Raker Internal Ormawa & LDK ORMAWA | BEM FIKOM UDB.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Professional Card (CCTV SOLO) -->
+                <div class="glass-panel p-8 sm:p-10 rounded-3xl flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full filter blur-2xl"></div>
+
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-start">
+                            <span class="text-[9px] font-mono text-white border border-white/25 px-3 py-1 rounded-full uppercase">KARIER LAPANGAN</span>
+                            <span class="text-[9px] font-mono text-obsidian-muted"><i class="fa-solid fa-calendar mr-1.5"></i>JULI – DESEMBER 2024</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold tracking-tight">Teknisi Instalasi dan Pengkabelan</h3>
+                            <p class="text-xs text-obsidian-muted font-mono mt-1">CCTV SOLO</p>
+                        </div>
+                        <ul class="space-y-3 text-xs text-obsidian-muted border-t border-white/5 pt-6">
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-circle-check text-white mt-1 mr-3 flex-shrink-0 text-[10px]"></i>
+                                <span>Melakukan instalasi penarikan kabel koaksial dan kabel data ethernet (UTP/FTP Cat5e & Cat6) pada area industri dan perumahan.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-circle-check text-white mt-1 mr-3 flex-shrink-0 text-[10px]"></i>
+                                <span>Memasang kamera CCTV tipe Analog dan IP Camera, perakitan fisik DVR/NVR, serta integrasi akses monitoring jarak jauh via ponsel.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-circle-check text-white mt-1 mr-3 flex-shrink-0 text-[10px]"></i>
+                                <span>Menganalisis kegagalan konektivitas jaringan lokal serta melakukan perbaikan pada pusat power supply kamera terpusat.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Mailer Terminal Section -->
+    <section id="contact" class="relative py-24 sm:py-32 z-10 px-6 sm:px-8 border-t border-white/5 bg-gradient-to-b from-obsidian-bg to-black">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div class="lg:col-span-5 space-y-6 text-left">
+                <span class="text-[10px] font-mono tracking-widest text-obsidian-muted uppercase">&lt;HUBUNGI SAYA&gt;</span>
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Mulai Kolaborasi Magang Kerja</h2>
+                <p class="text-xs sm:text-sm text-obsidian-muted leading-relaxed">
+                    Saya sangat terbuka untuk mengikuti proses seleksi magang kerja nyata, pengajuan wawancara, ataupun kolaborasi pengembangan proyek. Kirimkan pesan Anda melalui gerbang pengiriman berikut.
+                </p>
+
+                <!-- Plain CV Contact Points -->
+                <div class="space-y-4 pt-4 font-mono text-xs">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white text-xs">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div>
+                            <span class="block text-[8px] text-obsidian-muted uppercase">Alamat Email</span>
+                            <a href="mailto:250104022@mhs.udb.ac.id" class="font-bold hover:underline">250104022@mhs.udb.ac.id</a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <div class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white text-xs">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <span class="block text-[8px] text-obsidian-muted uppercase">Nomor Seluler</span>
+                            <a href="https://wa.me/628970804895" target="_blank" class="font-bold hover:underline">+62 897-080-4895</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Mailer Form -->
+            <div class="lg:col-span-7 bg-obsidian-card border border-white/10 rounded-3xl p-6 sm:p-8 shadow-premium relative">
+                <div class="flex items-center justify-between border-b border-white/5 pb-4 mb-6 font-mono text-xs text-obsidian-muted">
+                    <div class="flex space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-white/20"></span>
+                        <span class="w-2 h-2 rounded-full bg-white/20"></span>
+                        <span class="w-2 h-2 rounded-full bg-white/20"></span>
+                    </div>
+                    <span>smtp://udb-marcello-mailer</span>
+                </div>
+
+                <form id="collab-form" onsubmit="submitGatewayForm(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[9px] font-mono text-obsidian-muted uppercase mb-1.5">Nama Instansi / Perekrut</label>
+                            <input id="form-name" required type="text" placeholder="Masukkan nama..." class="w-full bg-obsidian-bg border border-white/10 focus:border-white rounded-xl px-4 py-3 text-xs text-white outline-none transition-all duration-200">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-mono text-obsidian-muted uppercase mb-1.5">E-mail / Nomor Kontak</label>
+                            <input id="form-contact" required type="text" placeholder="alamat@perusahaan.com" class="w-full bg-obsidian-bg border border-white/10 focus:border-white rounded-xl px-4 py-3 text-xs text-white outline-none transition-all duration-200">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[9px] font-mono text-obsidian-muted uppercase mb-1.5">Penawaran Tugas / Undangan Magang</label>
+                        <textarea id="form-message" required rows="3" placeholder="Tuliskan deskripsi tugas, lokasi kantor, atau jadwal wawancara..." class="w-full bg-obsidian-bg border border-white/10 focus:border-white rounded-xl px-4 py-3 text-xs text-white outline-none transition-all duration-200 resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3.5 bg-white text-black font-mono text-xs font-bold rounded-full hover:opacity-90 duration-200 shadow-subtle-white">
+                        KIRIM PENAWARAN & SALIN CADANGAN
+                    </button>
+                </form>
+
+                <!-- Form feedback screen -->
+                <div id="form-success" class="hidden absolute inset-0 bg-obsidian-card rounded-3xl flex flex-col items-center justify-center p-8 text-center z-20 border border-white/20">
+                    <div class="w-12 h-12 rounded-full border border-white flex items-center justify-center text-white text-lg mb-4 animate-bounce">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h4 class="text-lg font-bold">Transmisi Sukses!</h4>
+                    <p class="text-xs text-obsidian-muted mt-2 max-w-xs leading-relaxed font-mono">
+                        Pesan penawaran magang telah otomatis disalin ke clipboard perangkat Anda sebagai cadangan aman. Marcello akan segera membalas undangan Anda.
+                    </p>
+                    <button onclick="resetContactPanel()" class="mt-6 px-6 py-2 border border-white text-white rounded-full text-[10px] font-mono tracking-widest hover:bg-white hover:text-black transition-all">
+                        KEMBALI KE FORMULIR
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12 border-t border-white/5 relative z-10 text-xs font-mono text-obsidian-muted">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+                <span class="text-white font-bold tracking-widest block mb-1">&lt;MARCELLO ANTONIO/&gt;</span>
+                <p class="text-[9px]">&copy; 2026 Marcello Antonio. D3 Teknik Komputer Universitas Duta Bangsa Surakarta. All rights reserved.</p>
+            </div>
+            <div class="flex space-x-4">
+                <a href="mailto:250104022@mhs.udb.ac.id" class="hover:text-white transition"><i class="fa-solid fa-envelope text-sm"></i></a>
+                <a href="https://wa.me/628970804895" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-whatsapp text-sm"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE SCRIPTS -->
+    <script>
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileDropdown = document.getElementById('mobile-dropdown');
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileDropdown.classList.toggle('hidden');
+            if (mobileDropdown.classList.contains('hidden')) {
+                mobileMenuIcon.className = "fa-solid fa-bars text-sm";
+            } else {
+                mobileMenuIcon.className = "fa-solid fa-xmark text-sm";
+            }
+        });
+
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileDropdown.classList.add('hidden');
+                mobileMenuIcon.className = "fa-solid fa-bars text-sm";
+            });
+        });
+
+        function switchLab(tabId) {
+            document.querySelectorAll('.lab-pane').forEach(pane => pane.classList.add('hidden'));
+            document.querySelectorAll('.lab-tab').forEach(btn => {
+                btn.className = "lab-tab flex-1 px-6 py-3 border border-white/10 hover:border-white rounded-full text-xs font-mono tracking-widest bg-obsidian-card text-obsidian-muted hover:text-white transition-all duration-300";
+            });
+
+            document.getElementById(`pane-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).className = "lab-tab active flex-1 px-6 py-3 border border-white rounded-full text-xs font-mono tracking-widest bg-white text-black transition-all duration-300 shadow-subtle-white";
+        }
+
+        function compileMikrotikCode() {
+            const ip = document.getElementById('mt-ip-val').value;
+            const qos = document.getElementById('mt-qos-val').value;
+            const codeBox = document.getElementById('code-mt');
+
+            codeBox.innerHTML = `/ip hotspot user profile add name="Staff_L1" rate-limit="${qos}"
+/ip dhcp-client add interface=ether1 disabled=no
+/ip dns set servers=8.8.8.8,1.1.1.1 allow-remote-requests=yes
+/ip firewall nat add chain=srcnat src-address=${ip} out-interface=ether1 action=masquerade`;
+        }
+
+        function triggerPulseSimulation(mode) {
+            const bpmTxt = document.getElementById('oscilloscope-bpm-txt');
+            const statusTxt = document.getElementById('oscilloscope-status-txt');
+            const svgOutput = document.getElementById('oscilloscope-svg');
+            const codeBox = document.getElementById('code-ard');
+
+            let rate = 75;
+            let pathShape = "M 0 50 L 50 50 L 55 10 L 60 90 L 65 50 L 120 50 L 125 10 L 130 90 L 135 50 L 200 50 L 205 10 L 210 90 L 215 50 L 280 50 L 285 10 L 290 90 L 295 50 L 400 50";
+            let cPlusPlusCode = "";
+
+            if (mode === 'low') {
+                rate = 55;
+                statusTxt.textContent = "ALARM: BRADYCARDIA DETECTED";
+                statusTxt.className = "text-yellow-500 font-bold";
+                pathShape = "M 0 50 L 90 50 L 95 10 L 100 90 L 105 50 L 240 50 L 245 10 L 250 90 L 255 50 L 400 50";
+                cPlusPlusCode = `#define PULSE_PIN A0
+// Mode Bradycardia: Analisis Sinyal Lambat
+void setup() {
+  Serial.begin(9600);
+}
+void loop() {
+  int val = analogRead(PULSE_PIN);
+  Serial.println(val);
+  delay(30); 
+}`;
+            } else if (mode === 'normal') {
+                rate = 75;
+                statusTxt.textContent = "SIGNAL STABLE";
+                statusTxt.className = "text-white font-bold";
+                cPlusPlusCode = `#define PULSE_PIN A0
+int signalValue = 0;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(PULSE_PIN, INPUT);
+}
+
+void loop() {
+  signalValue = analogRead(PULSE_PIN);
+  Serial.print("TELEMETRY_RAW:");
+  Serial.println(signalValue);
+  delay(15); 
+}`;
+            } else if (mode === 'high') {
+                rate = 115;
+                statusTxt.textContent = "ALARM: TACHYCARDIA DETECTED";
+                statusTxt.className = "text-red-500 font-bold animate-pulse";
+                pathShape = "M 0 50 L 20 50 L 23 10 L 26 90 L 29 50 L 50 50 L 53 10 L 56 90 L 59 50 L 80 50 L 83 10 L 86 90 L 89 50 L 110 50 L 113 10 L 116 90 L 119 50 L 200 50 L 203 10 L 206 90 L 209 50 L 300 50 L 303 10 L 306 90 L 309 50 L 400 50";
+                cPlusPlusCode = `#define PULSE_PIN A0
+// Mode Tachycardia: Analisis Data Darurat Medis
+void setup() {
+  Serial.begin(115200); 
+}
+void loop() {
+  int val = analogRead(PULSE_PIN);
+  if(val > 512) {
+     Serial.println("ALERT_HIGH_RATE");
+  }
+  delay(8); 
+}`;
+            }
+
+            bpmTxt.textContent = `Aktif: ${rate} BPM`;
+            svgOutput.innerHTML = `<path d="${pathShape}" fill="none" stroke="${mode === 'high' ? '#EF4444' : mode === 'low' ? '#F59E0B' : '#FFFFFF'}" stroke-width="2" />`;
+            codeBox.textContent = cPlusPlusCode;
+        }
+
+        function pingGlobalTunnel() {
+            const consoleBox = document.getElementById('tunnel-log-console');
+            consoleBox.innerHTML = `<p class="text-white">[PENGUJIAN]: Menginisiasi handshake cloudflared local agent...</p>`;
+
+            setTimeout(() => {
+                consoleBox.innerHTML += `<p class="text-white/40">&gt; Mengaitkan port 8000 ke anycast Cloudflare...</p>`;
+            }, 300);
+
+            setTimeout(() => {
+                consoleBox.innerHTML += `<p class="text-white/80">&gt; Terowongan SSL TLS v1.3 aktif.</p>`;
+            }, 750);
+
+            setTimeout(() => {
+                consoleBox.innerHTML += `<p class="text-emerald-400 font-bold">&gt; Tautan Publik Siap: https://mhs-marcello.udb.ac.id/ [OK]</p>`;
+            }, 1200);
+        }
+
+        function setAvatarStyle(part) {
+            const visor = document.getElementById('vector-visor');
+            const glow = document.getElementById('vector-back-glow');
+
+            if (part === 'glow-white') {
+                glow.className = "absolute w-44 h-44 rounded-full bg-white/10 filter blur-xl animate-pulse";
+            } else if (part === 'glow-slate') {
+                glow.className = "absolute w-44 h-44 rounded-full bg-slate-500/20 filter blur-xl animate-pulse";
+            } else if (part === 'glow-dark') {
+                glow.className = "absolute w-44 h-44 rounded-full bg-black/80 filter blur-xl";
+            } else if (part === 'visor-white') {
+                visor.setAttribute('fill', 'rgba(255, 255, 255, 0.4)');
+                visor.setAttribute('stroke', '#ffffff');
+            } else if (part === 'visor-glass') {
+                visor.setAttribute('fill', 'rgba(18, 18, 22, 0.85)');
+                visor.setAttribute('stroke', '#ffffff');
+            }
+        }
+
+        function submitGatewayForm(event) {
+            event.preventDefault();
+            const name = document.getElementById('form-name').value;
+            const contact = document.getElementById('form-contact').value;
+            const message = document.getElementById('form-message').value;
+
+            document.getElementById('form-success').classList.remove('hidden');
+
+            const copyPayload = `[MARCELLO COLLAB TRANSMISSION]\nPengirim: ${name}\nKontak: ${contact}\nPesan: ${message}`;
+            const dummyArea = document.createElement("textarea");
+            dummyArea.value = copyPayload;
+            document.body.appendChild(dummyArea);
+            dummyArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummyArea);
+        }
+
+        function resetContactPanel() {
+            document.getElementById('form-success').classList.add('hidden');
+            document.getElementById('collab-form').reset();
+        }
+
+        function copyCode(sourceId, infoId) {
+            const textToCopy = document.getElementById(sourceId).innerText;
+            const dummyArea = document.createElement("textarea");
+            dummyArea.value = textToCopy;
+            document.body.appendChild(dummyArea);
+            dummyArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummyArea);
+
+            const label = document.getElementById(infoId);
+            label.classList.remove('hidden');
+            setTimeout(() => {
+                label.classList.add('hidden');
+            }, 3000);
+        }
+
+        // THREE.JS SCENE INTEGRATION (Matching visual reference of 'Landing page.jpg')
+        let scene, camera, renderer, blobMesh, particles;
+        let mouseX = 0, mouseY = 0;
+
+        function initThreeJS() {
+            const container = document.getElementById('canvas-3d-bg');
+            if (!container) return;
+
+            scene = new THREE.Scene();
+
+            // Set perspective camera
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 15;
+
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // Studio Lighting (Atmospheric clay shading)
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight1.position.set(5, 10, 7);
+            scene.add(dirLight1);
+
+            const dirLight2 = new THREE.DirectionalLight(0x444466, 0.5);
+            dirLight2.position.set(-5, -5, -5);
+            scene.add(dirLight2);
+
+            const ambientLight = new THREE.AmbientLight(0x111115, 0.6);
+            scene.add(ambientLight);
+
+            // Shaders for organic clay morphing shape ('Landing page.jpg')
+            const vertexShaderSource = `
+                varying vec3 vNormal;
+                varying vec3 vViewPosition;
+                uniform float uTime;
+                
+                void main() {
+                    vNormal = normalize(normalMatrix * normal);
+                    vec3 pos = position;
+                    
+                    // Layered sine wave displacement to simulate organic morphing
+                    float displacement = sin(pos.x * 0.8 + uTime * 0.4) * cos(pos.y * 0.8 + uTime * 0.4) * 0.5
+                                       + sin(pos.z * 1.2 + uTime * 0.6) * 0.25;
+                    pos += normal * displacement;
+                    
+                    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                    vViewPosition = -mvPosition.xyz;
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `;
+
+            const fragmentShaderSource = `
+                varying vec3 vNormal;
+                varying vec3 vViewPosition;
+                
+                void main() {
+                    vec3 normal = normalize(vNormal);
+                    vec3 viewDir = normalize(vViewPosition);
+                    
+                    // Fresnel / Rim Lighting Highlight
+                    float rim = 1.0 - max(dot(normal, viewDir), 0.0);
+                    rim = pow(rim, 4.0);
+                    
+                    // Dark luxurious obsidian gradient matching visual reference
+                    vec3 baseColor = vec3(0.08, 0.08, 0.1); 
+                    vec3 highlightColor = vec3(0.6, 0.63, 0.68);
+                    
+                    float d = max(dot(normal, vec3(1.0, 1.0, 1.0)), 0.0);
+                    vec3 finalColor = baseColor + highlightColor * d * 0.2 + vec3(1.0) * rim * 0.12;
+                    
+                    gl_FragColor = vec4(finalColor, 1.0);
+                }
+            `;
+
+            const customShaderMaterial = new THREE.ShaderMaterial({
+                vertexShader: vertexShaderSource,
+                fragmentShader: fragmentShaderSource,
+                uniforms: {
+                    uTime: { value: 0 }
+                },
+                transparent: true
+            });
+
+            // Geometry setup (Icosahedron high-res)
+            const blobGeometry = new THREE.IcosahedronGeometry(4.2, 64);
+            blobMesh = new THREE.Mesh(blobGeometry, customShaderMaterial);
+            scene.add(blobMesh);
+
+            // 3D Particles Starfield System ('Landing page.jpg' background)
+            const particleCount = 450;
+            const particleGeom = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 45;
+                positions[i + 1] = (Math.random() - 0.5) * 45;
+                positions[i + 2] = (Math.random() - 0.5) * 30;
+            }
+
+            particleGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            
+            const particleMaterial = new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 0.05,
+                transparent: true,
+                opacity: 0.35,
+                depthWrite: false
+            });
+
+            particles = new THREE.Points(particleGeom, particleMaterial);
+            scene.add(particles);
+
+            // Mouse move tracking
+            window.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX / window.innerWidth) - 0.5;
+                mouseY = (e.clientY / window.innerHeight) - 0.5;
+            });
+
+            // Touch alternatives
+            window.addEventListener('touchmove', (e) => {
+                if(e.touches.length === 1) {
+                    mouseX = (e.touches[0].clientX / window.innerWidth) - 0.5;
+                    mouseY = (e.touches[0].clientY / window.innerHeight) - 0.5;
+                }
+            });
+
+            // Window resize handler
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            animateLoop();
+        }
+
+        let lastTime = 0;
+        function animateLoop() {
+            requestAnimationFrame(animateLoop);
+
+            const time = performance.now() * 0.003;
+            
+            // Sync time uniform to morph the shape
+            if (blobMesh) {
+                blobMesh.material.uniforms.uTime.value = time;
+                
+                // Reactive rotation based on mouse coordinate coordinates
+                blobMesh.rotation.y = time * 0.15 + mouseX * 0.5;
+                blobMesh.rotation.x = time * 0.1 + mouseY * 0.5;
+            }
+
+            // Drift particles slowly
+            if (particles) {
+                particles.rotation.y = time * 0.02 + mouseX * 0.1;
+                particles.rotation.x = time * 0.01 + mouseY * 0.1;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Initialize ThreeJS cleanly upon DOM Load
+        window.onload = function() {
+            initThreeJS();
+        };
+    </script>
+</body>
+</html>
